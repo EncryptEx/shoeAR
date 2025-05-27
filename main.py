@@ -14,7 +14,8 @@ engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-app = FastAPI()
+app = FastAPI(title="Shoe Management API", description="API for managing shoes with markers", version="1.0.0")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Adjust this in production!
@@ -79,20 +80,20 @@ def add_shoe(
     
 @app.get("/get_shoe/{marker_number}")
 def get_shoe(marker_number: int, db: Session = Depends(get_db)):
-        shoe = db.query(Shoe).filter(Shoe.marker == marker_number).first()
-        if not shoe:
-            raise HTTPException(status_code=404, detail="Shoe not found.")
-        if not shoe.imgpath:
-            raise HTTPException(status_code=404, detail="Image path not set for this shoe.")
-        try:
-            return FileResponse(
-                path=f"shoes/shoe-{marker_number}.png",
-                media_type="image/png",
-                filename=f"shoe-{marker_number}.png",
-                headers={"Content-Disposition": "inline"}
-            )
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+    shoe = db.query(Shoe).filter(Shoe.marker == marker_number).first()
+    if not shoe:
+        raise HTTPException(status_code=404, detail="Shoe not found.")
+    if not shoe.imgpath:
+        raise HTTPException(status_code=404, detail="Image path not set for this shoe.")
+    try:
+        return FileResponse(
+            path=f"shoes/shoe-{marker_number}.png",
+            media_type="image/png",
+            filename=f"shoe-{marker_number}.png",
+            headers={"Content-Disposition": "inline"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/get_shoes/")
@@ -102,3 +103,15 @@ def get_shoes(db: Session = Depends(get_db)):
         return {"shoes": [{"marker": shoe.marker} for shoe in shoes]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/get_next_available_marker/")
+def get_next_available_marker(db: Session = Depends(get_db)):
+    try:
+        used_markers = {shoe.marker for shoe in db.query(Shoe).all()}
+        for marker in range(64):
+            if marker not in used_markers:
+                return {"next_available_marker": marker}
+        raise HTTPException(status_code=404, detail="No available markers found.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
