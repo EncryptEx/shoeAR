@@ -59,10 +59,12 @@ def add_shoe(marker_request: MarkerRequest, file: UploadFile = File(), db: Sessi
     <h1>Add Shoe</h1>
     <form action="http://127.0.0.1:8000/add_shoe/" method="post" enctype="multipart/form-data">
         <label for="marker_number">Marker Number (0-63):</label>
-        <?php 
-        // echo var_dump(json_decode(file_get_contents("http://127.0.1:8000/get_next_marker"), true)); ?>
-        <!-- <input type="hidden" id="marker_number" name="marker_number" min="0" max="63" value="" required> -->
-        <input type="number" id="marker_number" name="marker_number" min="0" max="63" required>
+        
+        <?php
+        $next_marker = file_get_contents("http://127.0.0.1:8000/get_next_available_marker");
+        $next_marker = json_decode($next_marker, true);
+        ?>
+        <input type="number" id="marker_number" name="marker_number" min="0" max="63" value="<?php echo $next_marker['next_available_marker']; ?>" required>
 
         <label for="file">Shoe Image:</label>
         <input type="file" id="file" name="file" accept="image/*" required>
