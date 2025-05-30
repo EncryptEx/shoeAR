@@ -1,40 +1,3 @@
-<!-- @app.post("/add_shoe/")
-def add_shoe(marker_request: MarkerRequest, file: UploadFile = File(), db: Session = Depends(get_db)):
-    try:
-        marker_number = marker_request.number
-        if marker_number < 0 or marker_number > 63:
-            raise HTTPException(status_code=400, detail="Marker number must be between 0 and 63.")
-        existing_shoe = db.query(Shoe).filter(Shoe.marker == marker_number).first()
-        if existing_shoe:
-            raise HTTPException(status_code=400, detail=f"Shoe with marker {marker_number} already exists.")
-        
-        newshoeimgpath = f"shoes/shoe-{marker_number}.png"
-        
-        try:        
-            im = Image.open(file.file)
-            if im.mode in ("RGBA", "P"): 
-                im = im.convert("RGB")
-            im.save(newshoeimgpath, 'PNG', quality=50)
-        except Exception:
-            raise HTTPException(status_code=500, detail='Something went wrong')
-        finally:
-            file.file.close()
-            im.close()
-        
-        shoe = Shoe(marker=marker_number, imgpath=f"markers/marker_{marker_number}.png")
-        
-        db.add(shoe)
-        db.commit()
-        db.refresh(shoe)
-        return {"message": f"Shoe with marker {marker_number} added successfully."}
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
-
-     -->
-
-<!-- add html form page to send a request that fullfils the contact above -->
-
 <!doctype HTML>
 <html>
 <head>
@@ -67,7 +30,7 @@ def add_shoe(marker_request: MarkerRequest, file: UploadFile = File(), db: Sessi
         <input type="number" id="marker_number" name="marker_number" min="0" max="63" value="<?php echo $next_marker['next_available_marker']; ?>" required>
 
         <label for="file">Shoe Image:</label>
-        <input type="file" id="file" name="file" accept="image/*" required>
+        <input type="file" id="file" name="file" accept="image/*" capture="environment" required>
 
         <button type="submit">Add Shoe</button>
     </form>
