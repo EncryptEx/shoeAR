@@ -2,7 +2,7 @@
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 ?>
 
-<html data-lt-installed="true">
+<html !DOCTYPE html>
 
 <head>
   <meta charset="UTF-8">
