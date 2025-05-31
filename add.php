@@ -44,88 +44,92 @@
                         Consell: Fes una foto clara de la sabata per obtenir millors resultats
                     </p>
                 </div>
-                    <form id="add-shoe-form" enctype="multipart/form-data" class="space-y-6">
+                <form id="add-shoe-form" enctype="multipart/form-data" class="space-y-6">
 
-                        <!-- Marker Number Input -->
-                        <div class="space-y-2">
-                            <label for="marker_number" class="flex items-center gap-2 text-gray-700 font-semibold text-lg">
-                                <i class="fas fa-hashtag text-purple-600"></i>
-                                Número de marcador
-                            </label>
+                    <!-- Marker Number Input -->
+                    <div class="space-y-2">
+                        <label for="marker_number" class="flex items-center gap-2 text-gray-700 font-semibold text-lg">
+                            <i class="fas fa-hashtag text-purple-600"></i>
+                            Número de marcador
+                        </label>
 
-                            <?php
-                            $next_marker = file_get_contents("http://127.0.0.1:8000/get_next_available_marker");
-                            $next_marker = json_decode($next_marker, true);
-                            ?>
+                        <?php
+                        $next_marker = file_get_contents("http://192.168.0.16:8000/get_next_available_marker");
+                        $next_marker = json_decode($next_marker, true);
+                        ?>
 
-                            <div class="relative">
-                                <div class="flex items-center relative">
-                                    <input
-                                        type="number"
-                                        id="marker_number"
-                                        name="marker_number"
-                                        min="0"
-                                        max="63"
-                                        value="<?php echo $next_marker['next_available_marker']; ?>"
-                                        required
-                                        class="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-l-xl focus:border-purple-500 focus:outline-none transition-colors"
-                                        inputmode="numeric">
-                                    <script>
-                                        document.getElementById('marker_number').value = "<?php echo $next_marker['next_available_marker']; ?>";
-                                    </script>
-                                    <span class="inline-flex items-center px-3 h-full rounded-r-xl border border-r-0 border-gray-300 bg-gray-100 text-gray-500 text-lg py-4">
-                                        <i class="fas fa-tag text-lg"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-gray-500 ml-1">Rang: 0-63 • Següent lliure: <span id="marker-suggest"><?php echo $next_marker['next_available_marker']; ?></span></p>
-                        </div>
-
-                        <!-- Image Upload -->
-                        <div class="space-y-2">
-                            <label for="file" class="flex items-center gap-2 text-gray-700 font-semibold text-lg">
-                                <i class="fas fa-camera text-purple-600"></i>
-                                Imatge de la sabata
-                            </label>
-
-                            <!-- Custom file upload area -->
-                            <div class="relative">
+                        <div class="relative">
+                            <div class="flex items-center relative">
                                 <input
-                                    type="file"
-                                    id="file"
-                                    name="file"
-                                    accept="image/*"
-                                    capture="environment"
+                                    type="number"
+                                    id="marker_number"
+                                    name="marker_number"
+                                    min="0"
+                                    max="63"
+                                    value="<?php echo $next_marker['next_available_marker']; ?>"
                                     required
-                                    class="hidden"
-                                    onchange="updateFileName(this)">
+                                    class="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-l-xl focus:border-purple-500 focus:outline-none transition-colors"
+                                    inputmode="numeric">
+                                <script>
+                                    document.getElementById('marker_number').value = "<?php echo $next_marker['next_available_marker']; ?>";
+                                </script>
+                                <!-- <button type="button" id="scan-marker-btn" class="px-4 py-4 bg-purple-100 text-purple-700 rounded-r-xl border border-l-0 border-purple-300 hover:bg-purple-200 transition-colors flex items-center gap-1">
+                                            <i class="fas fa-qrcode text-xl"></i>
+                                    </button> -->
+                                <span class="inline-flex items-center px-3 h-full rounded-r-xl border border-r-0 border-gray-300 bg-gray-100 text-gray-500 text-lg py-4">
+                                    <i class="fas fa-tag text-lg"></i>
+                                </span>
 
-                                <label for="file" class="block w-full cursor-pointer">
-                                    <div class="border-2 border-dashed border-purple-300 rounded-xl p-8 text-center hover:border-purple-500 hover:bg-purple-50 transition-all">
-                                        <i class="fas fa-cloud-upload-alt text-4xl text-purple-400 mb-3"></i>
-                                        <p class="text-gray-700 font-medium">Toca per fer una foto o pujar-ne una</p>
-                                        <p class="text-sm text-gray-500 mt-1" id="file-name">Cap fitxer seleccionat</p>
-                                    </div>
-                                </label>
                             </div>
                         </div>
+                        <p class="text-sm text-gray-500 ml-1">Rang: 0-63 • Següent lliure: <span id="marker-suggest"><?php echo $next_marker['next_available_marker']; ?></span></p>
+                    </div>
 
-                        <!-- Submit Button -->
-                        <button
-                            type="submit"
-                            class="w-full bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold text-lg py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3">
-                            <i class="fas fa-plus-circle"></i>
-                            Afegir sabata a l'inventari
-                        </button>
-                    </form>
-                </div>
+                    <!-- Image Upload -->
+                    <div class="space-y-2">
+                        <label for="file" class="flex items-center gap-2 text-gray-700 font-semibold text-lg">
+                            <i class="fas fa-camera text-purple-600"></i>
+                            Imatge de la sabata
+                        </label>
 
-                <!-- Bottom spacing for mobile -->
-                <div class="h-4"></div>
+                        <!-- Custom file upload area -->
+                        <div class="relative">
+                            <input
+                                type="file"
+                                id="file"
+                                name="file"
+                                accept="image/*"
+                                capture="environment"
+                                required
+                                class="hidden"
+                                onchange="updateFileName(this)">
+
+                            <label for="file" class="block w-full cursor-pointer">
+                                <div class="border-2 border-dashed border-purple-300 rounded-xl p-8 text-center hover:border-purple-500 hover:bg-purple-50 transition-all">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-purple-400 mb-3"></i>
+                                    <p class="text-gray-700 font-medium">Toca per fer una foto o pujar-ne una</p>
+                                    <p class="text-sm text-gray-500 mt-1" id="file-name">Cap fitxer seleccionat</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button
+                        type="submit"
+                        class="w-full bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold text-lg py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3">
+                        <i class="fas fa-plus-circle"></i>
+                        Afegir sabata a l'inventari
+                    </button>
+                </form>
             </div>
-        </main>
 
-        <?php include 'navbar.php'; ?>
+            <!-- Bottom spacing for mobile -->
+            <div class="h-4"></div>
+    </div>
+    </main>
+
+    <?php include 'navbar.php'; ?>
     </div>
 
     <script>
@@ -173,7 +177,7 @@
             }
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/add_shoe/', {
+                const response = await fetch('http://192.168.0.16:8000/add_shoe/', {
                     method: 'POST',
                     body: formData
                 });
@@ -197,8 +201,15 @@
                     document.getElementById('marker-suggest').innerText = incrementMarker;
 
                     // Reset file input and display
-                    
                     document.getElementById('file-name').textContent = 'Cap fitxer seleccionat';
+
+                    // Reset upload area color and icon
+                    const uploadArea = document.querySelector('input#file').nextElementSibling.querySelector('div');
+                    uploadArea.classList.remove('bg-green-50', 'border-green-400', 'hover:border-green-500', 'hover:bg-green-50');
+                    uploadArea.classList.add('hover:border-purple-500', 'hover:bg-purple-50');
+                    const uploadIcon = uploadArea.querySelector('i');
+                    uploadIcon.classList.remove('text-green-500');
+                    uploadIcon.classList.add('text-purple-400');
                 } else {
                     const error = await response.text();
                     // Show a Tailwind-styled error alert
@@ -232,6 +243,5 @@
             }
         });
     </script>
-</body>
 
 </html>

@@ -27,7 +27,7 @@
             <div class="max-w-lg mx-auto">
                 <?php
                 // Obtenir la llista de sabates ocupades
-                $shoes = file_get_contents("http://127.0.0.1:8000/get_shoes");
+                $shoes = file_get_contents("http://192.168.0.16:8000/get_shoes");
                 $shoes = json_decode($shoes, true)['shoes'] ?? [];
                 # order by marker marker
                 usort($shoes, function($a, $b) {
@@ -45,7 +45,7 @@
                             <div class="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center">
                                 <div class="w-32 h-32 mb-3 flex items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
                                     
-                                <img src="http://127.0.0.1:8000/get_shoe/<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" />
+                                <img src="http://192.168.0.16:8000/get_shoe/<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" />
                                    
                                 </div>
                                 <div class="flex items-center gap-2 mt-2">
