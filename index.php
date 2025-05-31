@@ -1,3 +1,7 @@
+<?php
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+?>
+
 <html data-lt-installed="true">
 
 <head>
@@ -32,7 +36,7 @@
   // ask for available shoes
   // and create images for each one
 
-  $response = file_get_contents("http://127.0.1:8000/get_shoes");
+  $response = file_get_contents("http://backend:8000/get_shoes");
   $shoes = json_decode($response, true);
   if (!is_array($shoes)) {
     $shoes = [];
@@ -43,7 +47,7 @@
       <?php
       // create images for each shoe
       foreach ($shoes['shoes'] as $i => $shoe) : ?>
-        <img id="m<?php echo $shoe['marker']; ?>" src="http://192.168.0.16:8000/get_shoe/<?php echo $shoe['marker']; ?>">
+        <img id="m<?php echo $shoe['marker']; ?>" src="http://127.0.0.1:8000/get_shoe_hd/<?php echo $shoe['marker']; ?>">
       <?php endforeach; ?>
     </a-assets>
 
@@ -51,7 +55,7 @@
       <a-marker type="barcode" value="<?php echo $shoe['marker']; ?>">
         <?php
         // Get image size to maintain aspect ratio
-        $img_url = "http://192.168.0.16:8000/get_shoe/" . $shoe['marker'];
+        $img_url = "http://backend:8000/get_shoe_hd/" . $shoe['marker'];
         $img_size = @getimagesize($img_url);
         if ($img_size) {
           $width = $img_size[0];

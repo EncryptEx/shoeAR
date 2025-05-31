@@ -1,3 +1,6 @@
+<?php
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+?>
 <!DOCTYPE html>
 <html lang="ca">
 
@@ -54,7 +57,7 @@
                         </label>
 
                         <?php
-                        $next_marker = file_get_contents("http://192.168.0.16:8000/get_next_available_marker");
+                        $next_marker = file_get_contents("http://backend:8000/get_next_available_marker/");
                         $next_marker = json_decode($next_marker, true);
                         ?>
 
@@ -263,7 +266,7 @@
             }
 
             try {
-                const response = await fetch('http://192.168.0.16:8000/add_shoe/', {
+                const response = await fetch('http://127.0.0.1:8000/add_shoe/', {
                     method: 'POST',
                     body: formData
                 });

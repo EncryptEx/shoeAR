@@ -1,5 +1,7 @@
 /image1.png
 /shoes.db
-__pycache__/
+__pycache__
 env/
 shoes/*
+shoes/.DS_Store
+

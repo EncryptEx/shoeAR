@@ -1,0 +1,32 @@
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    volumes:
+      - ./shoes:/app/shoes
+      - ./markers:/app/markers
+      - ./shoes.db:/app/shoes.db
+    ports:
+      - "8000:8000"
+    environment:
+      - TZ=Europe/Madrid
+    networks:
+      - shoe-net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    environment:
+      - TZ=Europe/Madrid
+    networks:
+      - shoe-net
+
+networks:
+  shoe-net:

@@ -85,18 +85,27 @@ def add_shoe(
         raise HTTPException(status_code=500, detail=str(e))
 
     
+@app.get("/get_shoe_hd/{marker_number}")
+def get_shoe_hd(marker_number: int, db: Session = Depends(get_db)):
+    return get_shoe(marker_number, db, is_thumb=False)
+
+
 @app.get("/get_shoe/{marker_number}")
-def get_shoe(marker_number: int, db: Session = Depends(get_db)):
+def get_shoe(marker_number: int, db: Session = Depends(get_db), is_thumb: bool = True):
     shoe = db.query(Shoe).filter(Shoe.marker == marker_number).first()
     if not shoe:
         raise HTTPException(status_code=404, detail="Shoe not found.")
     if not shoe.imgpath:
         raise HTTPException(status_code=404, detail="Image path not set for this shoe.")
     try:
+        if is_thumb:
+            img_path = f"shoe-{marker_number}-thumb.png"
+        else:
+            img_path = f"shoe-{marker_number}.png"
         return FileResponse(
-            path=f"shoes/shoe-{marker_number}-thumb.png",
+            path=f"shoes/{img_path}",
             media_type="image/png",
-            filename=f"shoe-{marker_number}-thumb.png",
+            filename=img_path,
             headers={"Content-Disposition": "inline"}
         )
     except Exception as e:
