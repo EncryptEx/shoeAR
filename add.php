@@ -161,7 +161,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
                     img.onload = function() {
                         EXIF.getData(img, function() {
                             const orientation = EXIF.getTag(this, "Orientation");
-                            alert(`EXIF Orientation: ${orientation}`);
+                            // alert(`EXIF Orientation: ${orientation}`);
                             let drawWidth = img.width;
                             let drawHeight = img.height;
                             let canvas = document.createElement('canvas');
@@ -266,7 +266,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
             }
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/add_shoe/', {
+                const response = await fetch('http://192.168.0.27:8000/add_shoe/', {
                     method: 'POST',
                     body: formData
                 });

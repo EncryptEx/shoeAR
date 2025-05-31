@@ -47,7 +47,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
       <?php
       // create images for each shoe
       foreach ($shoes['shoes'] as $i => $shoe) : ?>
-        <img id="m<?php echo $shoe['marker']; ?>" src="http://127.0.0.1:8000/get_shoe_hd/<?php echo $shoe['marker']; ?>">
+        <img id="m<?php echo $shoe['marker']; ?>" src="http://192.168.0.27:8000/get_shoe_hd/<?php echo $shoe['marker']; ?>">
       <?php endforeach; ?>
     </a-assets>
 
