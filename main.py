@@ -56,16 +56,23 @@ def add_shoe(
             raise HTTPException(status_code=400, detail=f"Shoe with marker {marker_number} already exists.")
         
         newshoeimgpath = f"shoes/shoe-{marker_number}.png"
+        thumbpath = f"shoes/shoe-{marker_number}-thumb.png"
         
         try:        
             im = Image.open(file.file)
             if im.mode in ("RGBA", "P"): 
                 im = im.convert("RGB")
             im.save(newshoeimgpath, 'PNG', quality=50)
+            # Create and save thumbnail
+            thumb = im.copy()
+            thumb.thumbnail((256, 256))
+            thumb.save(thumbpath, 'PNG', quality=30)
         
         finally:
             file.file.close()
             im.close()
+            if 'thumb' in locals():
+                thumb.close()
         
         shoe = Shoe(marker=marker_number, imgpath=newshoeimgpath)
         
@@ -87,9 +94,9 @@ def get_shoe(marker_number: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Image path not set for this shoe.")
     try:
         return FileResponse(
-            path=f"shoes/shoe-{marker_number}.png",
+            path=f"shoes/shoe-{marker_number}-thumb.png",
             media_type="image/png",
-            filename=f"shoe-{marker_number}.png",
+            filename=f"shoe-{marker_number}-thumb.png",
             headers={"Content-Disposition": "inline"}
         )
     except Exception as e:
@@ -114,4 +121,4 @@ def get_next_available_marker(db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="No available markers found.")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+

@@ -192,8 +192,9 @@
                                         ctx.scale(1, -1);
                                         break;
                                     case 6: // 90° CW
-                                        canvas.width = drawHeight;
-                                        canvas.height = drawWidth; // FIXED
+                                        canvas.width = drawWidth;
+                                        canvas.height = drawHeight; // FIXED
+                                        
                                         // ctx.rotate(-0.5 * Math.PI);
                                         // ctx.translate(-drawWidth, 0);
                                         break;
