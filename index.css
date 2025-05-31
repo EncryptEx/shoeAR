@@ -1,3 +1,22 @@
+a-scene, .a-canvas, #arjs-video {
+  width: 100vw !important;
+  height: 100vh !important;
+  top: calc(-81px / 2) !important;
+  left: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  z-index: 0;
+}
+
+html, body {
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
 html.a-fullscreen {
   bottom: 0;
   left: 0;

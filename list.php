@@ -63,26 +63,7 @@
                 <?php endif; ?>
             </div>
         </main>
-        <nav class="bg-white border-t border-gray-200 px-4 py-2 md:hidden sticky bottom-0 z-50">
-            <div class="flex justify-around">
-            <a href="add.php" class="flex flex-col items-center gap-1 py-2 px-3 text-gray-400">
-                <i class="fas fa-plus text-xl"></i>
-                <span class="text-xs">Afegir</span>
-            </a>
-            <a href="#" class="flex flex-col items-center gap-1 py-2 px-3 text-purple-600">
-                <i class="fas fa-list text-xl"></i>
-                <span class="text-xs">Llista</span>
-            </a>
-            <a href="#" class="flex flex-col items-center gap-1 py-2 px-3 text-gray-400">
-                <i class="fas fa-search text-xl"></i>
-                <span class="text-xs">Cercar</span>
-            </a>
-            <a href="#" class="flex flex-col items-center gap-1 py-2 px-3 text-gray-400">
-                <i class="fas fa-cog text-xl"></i>
-                <span class="text-xs">Configuració</span>
-            </a>
-            </div>
-        </nav>
+        <?php include 'navbar.php'; ?>
     </div>
 </body>
 </html>

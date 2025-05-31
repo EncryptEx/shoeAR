@@ -16,7 +16,6 @@ def create_pdf_with_markers(marker_count=64, markers_per_row=2, markers_per_col=
     marker_size = min(available_width / markers_per_row, available_height / markers_per_col)
 
     markers_per_page = markers_per_row * markers_per_col
-
     for i in range(marker_count):
         if i % markers_per_page == 0:
             pdf.add_page()
@@ -41,6 +40,11 @@ def create_pdf_with_markers(marker_count=64, markers_per_row=2, markers_per_col=
 
         # Add the image to the PDF
         pdf.image(temp_image_path, x=x, y=y, w=marker_size, h=marker_size)
+
+        # Add the marker number below the image
+        pdf.set_xy(x, y + marker_size)
+        pdf.set_font("Arial", size=20)
+        pdf.cell(marker_size, 6, str(i), align='C')
 
         # Remove the temporary image file
         os.remove(temp_image_path)

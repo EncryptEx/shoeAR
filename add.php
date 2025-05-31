@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="ca">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Afegir Sabata - Gestió d'Inventari</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Mobile optimizations -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" content="#7c3aed">
 </head>
+
 <body class="bg-gray-50 min-h-screen">
     <!-- Mobile-first container -->
     <div class="min-h-screen flex flex-col">
@@ -42,36 +44,32 @@
                         Consell: Fes una foto clara de la sabata per obtenir millors resultats
                     </p>
                 </div>
+                    <form id="add-shoe-form" enctype="multipart/form-data" class="space-y-6">
 
-                <!-- Form Card -->
-                <div class="bg-white rounded-2xl shadow-xl p-6">
-                    <form action="http://127.0.0.1:8000/add_shoe/" method="post" enctype="multipart/form-data" class="space-y-6">
-                        
                         <!-- Marker Number Input -->
                         <div class="space-y-2">
                             <label for="marker_number" class="flex items-center gap-2 text-gray-700 font-semibold text-lg">
                                 <i class="fas fa-hashtag text-purple-600"></i>
                                 Número de marcador
                             </label>
-                            
+
                             <?php
                             $next_marker = file_get_contents("http://127.0.0.1:8000/get_next_available_marker");
                             $next_marker = json_decode($next_marker, true);
                             ?>
-                            
+
                             <div class="relative">
                                 <div class="flex items-center relative">
-                                    <input 
-                                    type="number" 
-                                    id="marker_number" 
-                                    name="marker_number" 
-                                    min="0" 
-                                    max="63" 
-                                    value="<?php echo $next_marker['next_available_marker']; ?>" 
-                                    required
-                                    class="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-l-xl focus:border-purple-500 focus:outline-none transition-colors"
-                                    inputmode="numeric"
-                                    >
+                                    <input
+                                        type="number"
+                                        id="marker_number"
+                                        name="marker_number"
+                                        min="0"
+                                        max="63"
+                                        value="<?php echo $next_marker['next_available_marker']; ?>"
+                                        required
+                                        class="w-full px-4 py-4 text-lg border-2 border-gray-300 rounded-l-xl focus:border-purple-500 focus:outline-none transition-colors"
+                                        inputmode="numeric">
                                     <script>
                                         document.getElementById('marker_number').value = "<?php echo $next_marker['next_available_marker']; ?>";
                                     </script>
@@ -80,7 +78,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <p class="text-sm text-gray-500 ml-1">Rang: 0-63 • Següent lliure: <?php echo $next_marker['next_available_marker']; ?></p>
+                            <p class="text-sm text-gray-500 ml-1">Rang: 0-63 • Següent lliure: <span id="marker-suggest"><?php echo $next_marker['next_available_marker']; ?></span></p>
                         </div>
 
                         <!-- Image Upload -->
@@ -89,20 +87,19 @@
                                 <i class="fas fa-camera text-purple-600"></i>
                                 Imatge de la sabata
                             </label>
-                            
+
                             <!-- Custom file upload area -->
                             <div class="relative">
-                                <input 
-                                    type="file" 
-                                    id="file" 
-                                    name="file" 
-                                    accept="image/*" 
-                                    capture="environment" 
+                                <input
+                                    type="file"
+                                    id="file"
+                                    name="file"
+                                    accept="image/*"
+                                    capture="environment"
                                     required
                                     class="hidden"
-                                    onchange="updateFileName(this)"
-                                >
-                                
+                                    onchange="updateFileName(this)">
+
                                 <label for="file" class="block w-full cursor-pointer">
                                     <div class="border-2 border-dashed border-purple-300 rounded-xl p-8 text-center hover:border-purple-500 hover:bg-purple-50 transition-all">
                                         <i class="fas fa-cloud-upload-alt text-4xl text-purple-400 mb-3"></i>
@@ -114,10 +111,9 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button 
-                            type="submit" 
-                            class="w-full bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold text-lg py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3"
-                        >
+                        <button
+                            type="submit"
+                            class="w-full bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold text-lg py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3">
                             <i class="fas fa-plus-circle"></i>
                             Afegir sabata a l'inventari
                         </button>
@@ -129,27 +125,7 @@
             </div>
         </main>
 
-        <!-- Mobile-friendly bottom navigation (optional) -->
-        <nav class="bg-white border-t border-gray-200 px-4 py-2 md:hidden sticky bottom-0 z-50">
-            <div class="flex justify-around">
-            <a href="#" class="flex flex-col items-center gap-1 py-2 px-3 text-purple-600">
-                <i class="fas fa-plus text-xl"></i>
-                <span class="text-xs">Afegir</span>
-            </a>
-            <a href="list.php" class="flex flex-col items-center gap-1 py-2 px-3 text-gray-400">
-                <i class="fas fa-list text-xl"></i>
-                <span class="text-xs">Llista</span>
-            </a>
-            <a href="#" class="flex flex-col items-center gap-1 py-2 px-3 text-gray-400">
-                <i class="fas fa-search text-xl"></i>
-                <span class="text-xs">Cercar</span>
-            </a>
-            <a href="#" class="flex flex-col items-center gap-1 py-2 px-3 text-gray-400">
-                <i class="fas fa-cog text-xl"></i>
-                <span class="text-xs">Configuració</span>
-            </a>
-            </div>
-        </nav>
+        <?php include 'navbar.php'; ?>
     </div>
 
     <script>
@@ -157,11 +133,14 @@
         function updateFileName(input) {
             const fileName = input.files[0]?.name || 'Cap fitxer seleccionat';
             document.getElementById('file-name').textContent = fileName;
-            
+
             // Change the upload area style when file is selected
             const uploadArea = input.nextElementSibling.querySelector('div');
             if (input.files[0]) {
                 uploadArea.classList.add('bg-green-50', 'border-green-400');
+                uploadArea.classList.remove('hover:border-purple-500', 'hover:bg-purple-50');
+                uploadArea.classList.add('hover:border-green-500', 'hover:bg-green-50');
+
                 uploadArea.querySelector('i').classList.remove('text-purple-400');
                 uploadArea.querySelector('i').classList.add('text-green-500');
             }
@@ -174,6 +153,85 @@
                 input.style.fontSize = '16px';
             });
         });
+
+
+        document.getElementById('add-shoe-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            // Optional: Add your own validation here
+            const marker = formData.get('marker_number');
+            if (marker < 0 || marker > 63) {
+                alert('El número de marcador ha d\'estar entre 0 i 63.');
+                return;
+            }
+            if (!formData.get('file')) {
+                alert('Has de seleccionar una imatge.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/add_shoe/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    // Show a Tailwind-styled success alert
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-800 px-6 py-4 rounded-xl shadow-lg flex items-center gap-3 z-50';
+                    alertDiv.innerHTML = `
+                        <i class="fas fa-check-circle text-2xl text-green-500"></i>
+                        <span class="font-semibold">Sabata afegida correctament!</span>
+                    `;
+                    document.body.appendChild(alertDiv);
+                    setTimeout(() => {
+                        alertDiv.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                        setTimeout(() => alertDiv.remove(), 500);
+                    }, 2000);
+                    form.reset();
+                    incrementMarker = parseInt(marker) + 1;
+                    document.getElementById('marker_number').value = incrementMarker;
+                    document.getElementById('marker-suggest').innerText = incrementMarker;
+
+                    // Reset file input and display
+                    
+                    document.getElementById('file-name').textContent = 'Cap fitxer seleccionat';
+                } else {
+                    const error = await response.text();
+                    // Show a Tailwind-styled error alert
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-800 px-6 py-4 rounded-xl shadow-lg flex items-center gap-3 z-50';
+                    errorDiv.innerHTML = `
+                        <i class="fas fa-times-circle text-2xl text-red-500"></i>
+                        <span class="font-semibold">Error: </span>
+                        <span>${error}</span>
+                    `;
+                    document.body.appendChild(errorDiv);
+                    setTimeout(() => {
+                        errorDiv.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                        setTimeout(() => errorDiv.remove(), 500);
+                    }, 3000);
+                }
+            } catch (err) {
+                // Show a Tailwind-styled network error alert
+                const netErrorDiv = document.createElement('div');
+                netErrorDiv.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-800 px-6 py-4 rounded-xl shadow-lg flex items-center gap-3 z-50';
+                netErrorDiv.innerHTML = `
+                    <i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>
+                    <span class="font-semibold">Error de xarxa:</span>
+                    <span>${err.message}</span>
+                `;
+                document.body.appendChild(netErrorDiv);
+                setTimeout(() => {
+                    netErrorDiv.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                    setTimeout(() => netErrorDiv.remove(), 500);
+                }, 3000);
+            }
+        });
     </script>
 </body>
+
 </html>
