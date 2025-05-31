@@ -132,21 +132,106 @@
     <?php include 'navbar.php'; ?>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
     <script>
         // Update file name display
         function updateFileName(input) {
-            const fileName = input.files[0]?.name || 'Cap fitxer seleccionat';
-            document.getElementById('file-name').textContent = fileName;
+            const file = input.files[0];
+            document.getElementById('file-name').textContent = file ? file.name : 'Cap fitxer seleccionat';
 
             // Change the upload area style when file is selected
             const uploadArea = input.nextElementSibling.querySelector('div');
-            if (input.files[0]) {
+            if (file) {
                 uploadArea.classList.add('bg-green-50', 'border-green-400');
                 uploadArea.classList.remove('hover:border-purple-500', 'hover:bg-purple-50');
                 uploadArea.classList.add('hover:border-green-500', 'hover:bg-green-50');
 
                 uploadArea.querySelector('i').classList.remove('text-purple-400');
                 uploadArea.querySelector('i').classList.add('text-green-500');
+            }
+
+            // --- EXIF orientation fix ---
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        EXIF.getData(img, function() {
+                            const orientation = EXIF.getTag(this, "Orientation");
+                            alert(`EXIF Orientation: ${orientation}`);
+                            let drawWidth = img.width;
+                            let drawHeight = img.height;
+                            let canvas = document.createElement('canvas');
+                            let ctx = canvas.getContext('2d');
+
+                            if (orientation && orientation !== 1) {
+                                // Set canvas size and transform for each orientation (EXIF spec)
+                                switch (orientation) {
+                                    case 2: // horizontal flip
+                                        canvas.width = drawWidth;
+                                        canvas.height = drawHeight;
+                                        ctx.translate(drawWidth, 0);
+                                        ctx.scale(-1, 1);
+                                        break;
+                                    case 3: // 180°
+                                        canvas.width = drawWidth;
+                                        canvas.height = drawHeight; // FIXED
+                                        // ctx.translate(drawWidth, drawHeight);
+                                        // ctx.rotate(Math.PI);
+                                        break;
+                                    case 4: // vertical flip
+                                        canvas.width = drawWidth;
+                                        canvas.height = drawHeight;
+                                        ctx.translate(0, drawHeight);
+                                        ctx.scale(1, -1);
+                                        break;
+                                    case 5: // vertical flip + 90° CW
+                                        canvas.width = drawHeight;
+                                        canvas.height = drawWidth;
+                                        ctx.rotate(0.5 * Math.PI);
+                                        ctx.scale(1, -1);
+                                        break;
+                                    case 6: // 90° CW
+                                        canvas.width = drawHeight;
+                                        canvas.height = drawWidth; // FIXED
+                                        // ctx.rotate(-0.5 * Math.PI);
+                                        // ctx.translate(-drawWidth, 0);
+                                        break;
+                                    case 7: // horizontal flip + 90° CW
+                                        canvas.width = drawHeight;
+                                        canvas.height = drawWidth;
+                                        ctx.rotate(0.5 * Math.PI);
+                                        ctx.translate(drawWidth, -drawHeight);
+                                        ctx.scale(-1, 1);
+                                        break;
+                                    case 8: // 270° CW
+                                        canvas.width = drawHeight;
+                                        canvas.height = drawWidth;
+                                        ctx.rotate(-0.5 * Math.PI);
+                                        ctx.translate(-drawWidth, 0); //TODO
+                                        break;
+                                    default:
+                                        canvas.width = drawWidth;
+                                        canvas.height = drawHeight;
+                                }
+                                
+
+                                    ctx.drawImage(img, 0, 0);
+                                    canvas.toBlob(function(blob) {
+                                        const newFile = new File([blob], file.name, {
+                                            type: file.type
+                                        });
+                                        const dataTransfer = new DataTransfer();
+                                        dataTransfer.items.add(newFile);
+                                        input.files = dataTransfer.files;
+                                    }, file.type);
+                                
+                            }
+                        });
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
             }
         }
 
