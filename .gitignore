@@ -1,7 +1,8 @@
-/image1.png
 /shoes.db
 __pycache__
 env/
 shoes/*
+!shoes/.gitignore
 shoes/.DS_Store
+
 
