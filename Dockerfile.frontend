@@ -1,5 +1,21 @@
 FROM php:8.2-apache
 
+# Enable Apache SSL module
+RUN a2enmod ssl
+
+# Copy site files
 COPY . /var/www/html/
 
+# Create cert dir and copy SSL certs
+RUN mkdir /etc/apache2/ssl/
+COPY 192.168.0.27.pem /etc/apache2/ssl/server.crt
+COPY 192.168.0.27-key.pem /etc/apache2/ssl/server.key
+
+# Copy custom SSL vhost config
+COPY apache-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+
+# Enable the default SSL virtual host
+RUN a2ensite default-ssl
+
 EXPOSE 80
+EXPOSE 443

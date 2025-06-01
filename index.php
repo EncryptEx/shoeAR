@@ -35,8 +35,13 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
   <?php
   // ask for available shoes
   // and create images for each one
-
-  $response = file_get_contents("http://backend:8000/get_shoes");
+  $arrContextOptions = array(
+    "ssl"=>array(
+        "verify_peer"=>false,
+        "verify_peer_name"=>false,
+    ),
+  );
+  $response = file_get_contents("https://backend:8000/get_shoes", false, stream_context_create($arrContextOptions));
   $shoes = json_decode($response, true);
   if (!is_array($shoes)) {
     $shoes = [];
@@ -47,7 +52,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
       <?php
       // create images for each shoe
       foreach ($shoes['shoes'] as $i => $shoe) : ?>
-        <img id="m<?php echo $shoe['marker']; ?>" src="http://192.168.0.27:8000/get_shoe_hd/<?php echo $shoe['marker']; ?>">
+        <img id="m<?php echo $shoe['marker']; ?>" src="https://192.168.0.27:8000/get_shoe_hd/<?php echo $shoe['marker']; ?>">
       <?php endforeach; ?>
     </a-assets>
 
@@ -55,7 +60,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
       <a-marker type="barcode" value="<?php echo $shoe['marker']; ?>">
         <?php
         // Get image size to maintain aspect ratio
-        $img_url = "http://backend:8000/get_shoe_hd/" . $shoe['marker'];
+        $img_url = "https://backend:8000/get_shoe_hd/" . $shoe['marker'];
         $img_size = @getimagesize($img_url);
         if ($img_size) {
           $width = $img_size[0];
