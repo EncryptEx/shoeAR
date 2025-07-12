@@ -123,12 +123,11 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
                         </script>
                     </div>
                 <?php
-                else : if (empty($shoes) && is_array($shoes)):
+                elseif (empty($shoes) && is_array($shoes)):
                 ?>
                     <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-yellow-800 text-center">
                         <i class="fas fa-info-circle mr-2"></i>No hi ha sabates ocupades a l'inventari.
                     </div>
-                <?php endif; ?>
                 <?php endif; ?>
                 <button id="refresh-list" class="px-4 py-2 bg-purple-600 text-white rounded-xl shadow hover:bg-purple-700 transition">
                     Actualitza la llista
