@@ -64,7 +64,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
                             <div class="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center relative cursor-pointer hover:shadow-2xl transition-shadow duration-200" onclick="showShoeModal('<?= htmlspecialchars($shoe['marker']) ?>')">
                                 <div class="w-full h-auto mb-3 flex items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
                                     <!-- PROD: -->
-                                    <img src="https://192.168.0.27:8000/get_shoe<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" />
+                                    <img src="https://192.168.0.27:8000/get_shoe/<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" />
                                     <!-- TEST: -->
                                     <!-- <img src="http://localhost:8000/get_shoe/<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" /> -->
                                 </div>
