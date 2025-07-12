@@ -4,5 +4,4 @@ env/
 shoes/*
 !shoes/.gitignore
 shoes/.DS_Store
-
-
+*.pem

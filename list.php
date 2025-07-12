@@ -36,13 +36,25 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
                     ),
                 );
                 // Obtenir la llista de sabates ocupades
+                // PROD: 
                 $shoes = file_get_contents("https://backend:8000/get_shoes", false, stream_context_create($arrContextOptions));
-                $shoes = json_decode($shoes, true)['shoes'] ?? [];
-                # order by marker marker
-                usort($shoes, function($a, $b) {
-                    return $a['marker'] <=> $b['marker'];
-                });
-
+                // TEST:
+                // $shoes = file_get_contents("http://backend:8000/get_shoes", false, stream_context_create($arrContextOptions));
+                if($shoes === false) {
+                    $er = error_get_last();
+                    echo '<div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-center">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Error al carregar les sabates. Si us plau, intenta-ho més tard.
+                    <br><small class="text-xs">Error: ' . htmlspecialchars($er['message']) . '</small>
+                          </div>';
+                }
+                else {
+                    $shoes = json_decode($shoes, true)['shoes'] ?? [];
+                    # order by marker marker
+                    usort($shoes, function($a, $b) {
+                        return $a['marker'] <=> $b['marker'];
+                    });
+                }
+                
                 
 
                 if (!empty($shoes) && is_array($shoes)):
@@ -51,7 +63,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
                         <?php foreach ($shoes as $shoe): ?>
                             <div class="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center relative cursor-pointer hover:shadow-2xl transition-shadow duration-200" onclick="showShoeModal('<?= htmlspecialchars($shoe['marker']) ?>')">
                                 <div class="w-full h-auto mb-3 flex items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
+                                    <!-- PROD: -->
                                     <img src="https://192.168.0.27:8000/get_shoe/<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" />
+                                    <!-- TEST: -->
+                                    <!-- <img src="http://localhost:8000/get_shoe/<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" /> -->
                                 </div>
                                 <div class="flex items-center gap-2 mt-2">
                                     <span class="text-lg font-bold text-purple-700">#<?= htmlspecialchars($shoe['marker']) ?></span>
@@ -83,7 +98,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 
                             // Load high-res image on demand
                             const img = new Image();
+                            // PROD: 
                             img.src = 'https://192.168.0.27:8000/get_shoe_hd/' + encodeURIComponent(marker);
+                            // TEST:
+                            // img.src = 'https://localhost:8000/get_shoe_hd/' + encodeURIComponent(marker);
                             img.alt = 'Shoe #' + marker;
                             img.className = 'object-contain max-h-[60vh] w-auto rounded-xl border border-gray-200 bg-gray-100';
                             img.onload = function() {
@@ -105,15 +123,28 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
                         </script>
                     </div>
                 <?php
-                else:
+                elseif (empty($shoes) && is_array($shoes)):
                 ?>
                     <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-yellow-800 text-center">
                         <i class="fas fa-info-circle mr-2"></i>No hi ha sabates ocupades a l'inventari.
                     </div>
                 <?php endif; ?>
+                <button id="refresh-list" class="px-4 py-2 bg-purple-600 text-white rounded-xl shadow hover:bg-purple-700 transition">
+                    Actualitza la llista
+                </button>
+                <script defer>
+                    document.getElementById('refresh-list').addEventListener('click', async function() {
+                            if ('caches' in window) {
+                                const cache = await caches.open('shoe-ar-cache-v1');
+                                await cache.delete('/list.php');
+                                await cache.add('/list.php');
+                            }
+                            location.reload(true);
+                    });
+                </script>
             </div>
         </main>
-        <?php include 'navbar.php'; ?>
+                <?php include 'navbar.php'; ?>
     </div>
 </body>
 </html>
