@@ -317,9 +317,10 @@ $arrContextOptions = array(
             }
 
             try {
-                // PROD: // const response = await fetch('https://192.168.0.27:8000/add_shoe/', {
+                // PROD: // 
+                const response = await fetch('https://192.168.0.27:8000/add_shoe/', {
                 // TEST:
-                const response = await fetch('http://localhost:8000/add_shoe/', {
+                // const response = await fetch('http://localhost:8000/add_shoe/', {
                     method: 'POST',
                     body: formData
                 });

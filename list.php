@@ -36,9 +36,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
                     ),
                 );
                 // Obtenir la llista de sabates ocupades
-                // PROD: // $shoes = file_get_contents("https://backend:8000/get_shoes", false, stream_context_create($arrContextOptions));
+                // PROD: 
+                $shoes = file_get_contents("https://backend:8000/get_shoes", false, stream_context_create($arrContextOptions));
                 // TEST:
-                $shoes = file_get_contents("http://backend:8000/get_shoes", false, stream_context_create($arrContextOptions));
+                // $shoes = file_get_contents("http://backend:8000/get_shoes", false, stream_context_create($arrContextOptions));
                 if($shoes === false) {
                     $er = error_get_last();
                     echo '<div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-center">
@@ -62,8 +63,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
                         <?php foreach ($shoes as $shoe): ?>
                             <div class="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center relative cursor-pointer hover:shadow-2xl transition-shadow duration-200" onclick="showShoeModal('<?= htmlspecialchars($shoe['marker']) ?>')">
                                 <div class="w-full h-auto mb-3 flex items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
-                                    <!-- PROD:  https://192.168.0.27:8000/get_shoe  -->
-                                    <img src="http://localhost:8000/get_shoe/<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" />
+                                    <!-- PROD: -->
+                                    <img src="https://192.168.0.27:8000/get_shoe<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" />
+                                    <!-- TEST: -->
+                                    <!-- <img src="http://localhost:8000/get_shoe/<?= urlencode($shoe['marker']) ?>" alt="Shoe #<?= htmlspecialchars($shoe['marker']) ?>" class="object-cover w-full h-full" /> -->
                                 </div>
                                 <div class="flex items-center gap-2 mt-2">
                                     <span class="text-lg font-bold text-purple-700">#<?= htmlspecialchars($shoe['marker']) ?></span>
@@ -95,8 +98,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 
                             // Load high-res image on demand
                             const img = new Image();
-                            // PROD: https://192.168.0.27:8000/get_shoe_hd/
-                            img.src = 'https://localhost:8000/get_shoe_hd/' + encodeURIComponent(marker);
+                            // PROD: 
+                            img.src = 'https://192.168.0.27:8000/get_shoe_hd/' + encodeURIComponent(marker);
+                            // TEST:
+                            // img.src = 'https://localhost:8000/get_shoe_hd/' + encodeURIComponent(marker);
                             img.alt = 'Shoe #' + marker;
                             img.className = 'object-contain max-h-[60vh] w-auto rounded-xl border border-gray-200 bg-gray-100';
                             img.onload = function() {
@@ -133,6 +138,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
                             if ('caches' in window) {
                                 const cache = await caches.open('shoe-ar-cache-v1');
                                 await cache.delete('/list.php');
+                                await cache.add('/list.php');
                             }
                             location.reload(true);
                     });
